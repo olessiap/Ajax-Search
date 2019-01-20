@@ -1,9 +1,10 @@
 const url = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json'
 const cities = [];
 
-fetch(url)
+fetch(url) 
     .then(resp => resp.json())
-    .then(data => cities.push(...data)) 
+    .then(data => cities.push(...data))
+
 
 
 function findMatches(wordToMatch, cities) {
@@ -13,19 +14,22 @@ function findMatches(wordToMatch, cities) {
     })
 }
 
-function displayMatches(matchedWord){
+
+function displayMatches(matchedWord) {
     const resultsArray = findMatches(this.value, cities);
-    let highlightedStr = new RegExp(this.value);
     const html = resultsArray.map(result => {
+        const highlightedStr = new RegExp(this.value, 'gi');
+        const cityName = result.city.replace(highlightedStr, `<span class="hl">${this.value}</span>`)
+        const stateName = result.state.replace(highlightedStr, `<span class="hl">${this.value}</span>`)
         return `
             <li>
-                <span>${result.city}, ${result.state}</span>
-                <span>${result.population}</span>
+                <span>${cityName}, ${stateName} </span>
+                <span>${result.population} </span>
             </li>
         `;
     }).join("");
     suggestions.innerHTML = html;
- }
+}
 
 const searchInput = document.querySelector('.search');
 const suggestions = document.querySelector('.suggestions');
